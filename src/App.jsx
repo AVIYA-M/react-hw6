@@ -3,7 +3,9 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import RecipeDetails from "./pages/RecipeDetails";
-// ↓ כאן כל אחת מוסיפה את ה־import שלה ↓
+import RecipesList from "./pages/RecipesList";
+
+
 
 export default function App() {
   return (
@@ -11,6 +13,7 @@ export default function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="/recipes/:id" element={<RecipeDetails />} />
+        <Route path="recipes" element={<RecipesList/>} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
