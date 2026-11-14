@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import { Link, useSearchParams } from 'react-router';
 
 export default function RecipesList() {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const search = searchParams.get("q") || "";
+    const searchRef = useRef(null);
+
     useEffect(() => {
         fetch('https://dummyjson.com/recipes')
             .then(res => {
@@ -24,21 +29,49 @@ export default function RecipesList() {
 
     }, []);
 
-    
+    useEffect(() => {
+        searchRef.current?.focus();
+    }, []);
+
+    const handleSearch = (e) => {
+        const value = e.target.value;
+        setSearchParams(value ? { q: value } : {});
+    }
+
+    const filtered = recipes.filter(recipe =>
+        recipe.name.toLowerCase().includes(search.toLowerCase())
+    );
     return (
         <div>
             <h1>מתכונים</h1>
+            <input
+            ref={searchRef}
+                type="text"
+                placeholder='Search recipe'
+                value={search}
+                onChange={handleSearch}
+            />
             {loading && <p>טוען...</p>}
             {error && <p>{error}</p>}
             {!loading && !error && (
-            <ul>
-                {recipes.map(recipe => (
-                    <li key={recipe.id}>
-                        {recipe.name}
-                    </li>
-                ))}
-            </ul>
+                <>
+
+                    {filtered.length > 0 ? (
+                        <ul>
+
+                            {filtered.map(recipe => (
+                                <li key={recipe.id}>
+                                    <Link to={`/recipes/${recipe.id}`}>
+                                        {recipe.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>לא נמצאו מתכונים</p>
+                    )}
+                </>
             )}
         </div>
-    )
+    );
 }
