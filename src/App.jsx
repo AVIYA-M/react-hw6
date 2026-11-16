@@ -1,9 +1,12 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route , Outlet} from "react-router";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import RecipeDetails from "./pages/RecipeDetails";
 import RecipesList from "./pages/RecipesList";
+import Controlled from "./login/Controlled";
+import Uncontrolled from "./login/Uncontrolled";
+import Rhf from "./login/Rhf";
 
 export default function App() {
   return (
@@ -12,6 +15,13 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="recipes/:id" element={<RecipeDetails />} />
         <Route path="recipes" element={<RecipesList />} />
+        {/*מקונן*/}
+        <Route path="login" element={<Outlet />}>
+          <Route path="controlled" element={<Controlled />} />
+          <Route path="uncontrolled" element={<Uncontrolled />} />
+          <Route path="rhf" element={<Rhf />} />
+        </Route>
+
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
